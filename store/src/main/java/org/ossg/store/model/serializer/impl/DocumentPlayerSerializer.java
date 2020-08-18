@@ -16,39 +16,42 @@ public class DocumentPlayerSerializer implements PlayerSerializer<Document> {
 	            || (player.getId().length() == 0) 
 	            || (player.getName() == null) 
 	            || (player.getName().length() == 0) 
-	            || (player.getEmail() == null) 
-	            || (player.getEmail().length() == 0) 
 	        ) {
 	            throw new IllegalArgumentException("Player object contains invalid data");
 	        }
 
-	        return new Document("id", player.getId())
-	                .append("name", player.getName())
-	                .append("email", player.getEmail());
+		Document document = new Document("id", player.getId()).append("name", player.getName());
+		if((player.getEmail() != null) && (player.getEmail().length() > 0)){
+			document.append("email", player.getEmail());
+		}	
+	    return document;
 	}
 
 	@Override
 	public Player deserialize(Document document) {
 		
-		if (document == null
-				|| (document.getString("id") == null)
-				|| (document.getString("id").length() == 0)
-				|| (document.getString("name") == null)
-				|| (document.getString("name").length() == 0)
-				|| (document.getString("email") == null)
-				|| (document.getString("email").length() == 0)
-			) {
-			throw new IllegalArgumentException("Unable to desiarilize Player object. Document contains invalid data");
-        }
-
         String id = document.getString("id");
         String name = document.getString("name");
         String email = document.getString("email");
 
-        return new Player()
-        			.setId(id)
-        			.setName(name)
-        			.setEmail(email);
+		if (document == null
+				|| (id == null)
+				|| (id.length() == 0)
+				|| (name == null)
+				|| (name.length() == 0)
+			) {
+			throw new IllegalArgumentException("Unable to desiarilize Player object. Document contains invalid data");
+        }
+
+
+		Player player = new Player().setId(id).setName(name);
+		if(
+			(email != null)
+			&& (email.length() > 0)
+		) {
+			player.setEmail(email);
+		}
+        return player;
 	}
 
 }

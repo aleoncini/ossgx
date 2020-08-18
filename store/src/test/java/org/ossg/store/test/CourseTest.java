@@ -5,37 +5,36 @@ import javax.inject.Inject;
 import org.bson.Document;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.ossg.store.model.Course;
+import org.ossg.store.model.Hole;
+import org.ossg.store.model.serializer.CourseSerializer;
 
 import io.quarkus.test.junit.QuarkusTest;
 
-import org.ossg.store.model.Player;
-import org.ossg.store.model.serializer.PlayerSerializer;
-
 @QuarkusTest
-public class PlayerTest {
-
+public class CourseTest {
 	@Inject
-    PlayerSerializer<Document> playerSerializer;
+    CourseSerializer<Document> serializer;
 
     @Test
 	void testEquals() {
 
 		/** test empty objects */
-		Player first = new Player();
-		Player second = new Player();
+		Course first = new Course();
+        Course second = new Course();
 		
 		Assertions.assertTrue(first.equals(second));
 		Assertions.assertTrue(second.equals(first));
 		
 		/** test different objects */
-		first.setId("12345").setName("pippo");
-		second.setId("34567").setName("pluto");
+		first.setName("National Golf Club").setCap("00147");
+		second.setName("Circolo di Golf").setAddress("Via della bandierina, 18");
 		
 		Assertions.assertFalse(first.equals(second));
 		Assertions.assertFalse(second.equals(first));
 		
-		/** test equals objects */
-		second.setId("12345").setName("pippo");
+        /** test equals objects */
+        second = new Course().setName("National Golf Club").setCap("00147");
 		
 		Assertions.assertTrue(first.equals(second));
 		Assertions.assertTrue(second.equals(first));
@@ -46,19 +45,19 @@ public class PlayerTest {
 	void testHashCode() {
 		
 		/** test empty objects */
-		Player first = new Player();
-		Player second = new Player();
+		Course first = new Course();
+        Course second = new Course();
 		
 		Assertions.assertEquals(first.hashCode(), second.hashCode());
 		
 		/** test different objects */
-		first.setId("12345").setName("pippo");
-		second.setId("34567").setName("pluto");
+		first.setName("National Golf Club").setCap("00147");
+		second.setName("Circolo di Golf").setAddress("Via della bandierina, 18");
 		
 		Assertions.assertNotEquals(first.hashCode(), second.hashCode());
 		
 		/** test equals objects */
-		second.setId("12345").setName("pippo");
+        second = new Course().setName("National Golf Club").setCap("00147");
 		
 		Assertions.assertEquals(first.hashCode(), second.hashCode());
 		
@@ -67,17 +66,22 @@ public class PlayerTest {
 	@Test
 	void testSerialization() {
 
-		Player first = new Player().setId("12345").setName("pippo");
-		Player second = new Player();
-		
-		
+		Course first = new Course()
+						.setId("aaa")
+						.setName("Circolo di Golf")
+						.setAddress("Via della bandierina, 18");
+		for (int i=1; i<=18; i++){
+			first.setHole(i, new Hole().setHcp(i).setPar(4));
+		}				
+        Course second = new Course();
+				
         /** test different objects */
 		Assertions.assertFalse(first.equals(second));
 		Assertions.assertFalse(second.equals(first));
 
 		/** test equals objects */
-		Document document = playerSerializer.serialize(first);
-        second = playerSerializer.deserialize(document);
+		Document document = serializer.serialize(first);
+        second = serializer.deserialize(document);
 		
 		Assertions.assertTrue(first.equals(second));
 		Assertions.assertTrue(second.equals(first));

@@ -8,34 +8,33 @@ import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
 
-import org.ossg.store.model.Player;
-import org.ossg.store.model.serializer.PlayerSerializer;
+import org.ossg.store.model.Hole;
+import org.ossg.store.model.serializer.HoleSerializer;
 
 @QuarkusTest
-public class PlayerTest {
-
+public class HoleTest {
 	@Inject
-    PlayerSerializer<Document> playerSerializer;
+    HoleSerializer<Document> serializer;
 
     @Test
 	void testEquals() {
 
 		/** test empty objects */
-		Player first = new Player();
-		Player second = new Player();
+		Hole first = new Hole();
+        Hole second = new Hole();
 		
 		Assertions.assertTrue(first.equals(second));
 		Assertions.assertTrue(second.equals(first));
 		
 		/** test different objects */
-		first.setId("12345").setName("pippo");
-		second.setId("34567").setName("pluto");
+		first.setHcp(11).setPar(4);
+		second.setHcp(18).setPar(3);
 		
 		Assertions.assertFalse(first.equals(second));
 		Assertions.assertFalse(second.equals(first));
 		
 		/** test equals objects */
-		second.setId("12345").setName("pippo");
+		second.setHcp(11).setPar(4);
 		
 		Assertions.assertTrue(first.equals(second));
 		Assertions.assertTrue(second.equals(first));
@@ -46,19 +45,19 @@ public class PlayerTest {
 	void testHashCode() {
 		
 		/** test empty objects */
-		Player first = new Player();
-		Player second = new Player();
+		Hole first = new Hole();
+		Hole second = new Hole();
 		
 		Assertions.assertEquals(first.hashCode(), second.hashCode());
 		
 		/** test different objects */
-		first.setId("12345").setName("pippo");
-		second.setId("34567").setName("pluto");
+		first.setHcp(11).setPar(4);
+		second.setHcp(18).setPar(3);
 		
 		Assertions.assertNotEquals(first.hashCode(), second.hashCode());
 		
 		/** test equals objects */
-		second.setId("12345").setName("pippo");
+		second.setHcp(11).setPar(4);
 		
 		Assertions.assertEquals(first.hashCode(), second.hashCode());
 		
@@ -67,8 +66,8 @@ public class PlayerTest {
 	@Test
 	void testSerialization() {
 
-		Player first = new Player().setId("12345").setName("pippo");
-		Player second = new Player();
+		Hole first = new Hole().setHcp(11).setPar(4);
+		Hole second = new Hole();
 		
 		
         /** test different objects */
@@ -76,8 +75,8 @@ public class PlayerTest {
 		Assertions.assertFalse(second.equals(first));
 
 		/** test equals objects */
-		Document document = playerSerializer.serialize(first);
-        second = playerSerializer.deserialize(document);
+		Document document = serializer.serialize(first);
+        second = serializer.deserialize(document);
 		
 		Assertions.assertTrue(first.equals(second));
 		Assertions.assertTrue(second.equals(first));

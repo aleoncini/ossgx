@@ -52,4 +52,17 @@ public class Player {
         return Objects.hash(id, name, email);
     }
 
+    @Override
+    public String toString(){
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("{ ");
+        buffer.append("\"id\": \"").append(id).append("\", ");
+        buffer.append("\"name\": \"").append(name).append("\"");
+        if (email != null){
+            buffer.append(", \"email\": \"").append(email).append("\"");
+        }
+        buffer.append(" }");
+        return  buffer.toString();
+    }
+
 }

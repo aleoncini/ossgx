@@ -106,14 +106,15 @@ public class RoundTest {
 
 		Round first = new Round();
 		Round second = new Round();
-		
+        
+        DayOfEvent dayOfEvent = new DayOfEvent().setDay(14).setMonth(1).setYear(2020);
         first.setId("aaa")
             .setPlayerId("bbb")
             .setCourseId("ccc")
             .setPlayerName("pippo")
             .setCourseName("campo da golf")
             .setPhcp(10)
-            .setDayOfEvent(new DayOfEvent());
+            .setDayOfEvent(dayOfEvent);
 
         for(int i = 1; i<= 18; i++){
             first.setScore(i, i, 4, 5);

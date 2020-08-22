@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.ossg.store.model.Course;
 import org.ossg.store.model.Hole;
+import org.ossg.store.model.Position;
 import org.ossg.store.model.serializer.CourseSerializer;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -66,10 +67,12 @@ public class CourseTest {
 	@Test
 	void testSerialization() {
 
+		Position position = new Position().setLatitude(234.26876).setLongitude(45.254);
 		Course first = new Course()
 						.setId("aaa")
 						.setName("Circolo di Golf")
-						.setAddress("Via della bandierina, 18");
+						.setAddress("Via della bandierina, 18")
+						.setPosition(position);
 		for (int i=1; i<=18; i++){
 			first.setHole(i, new Hole().setHcp(i).setPar(4));
 		}				

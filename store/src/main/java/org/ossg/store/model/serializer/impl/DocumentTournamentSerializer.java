@@ -1,14 +1,19 @@
 package org.ossg.store.model.serializer.impl;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import org.bson.Document;
 import org.ossg.store.model.DayOfEvent;
 import org.ossg.store.model.Tournament;
+import org.ossg.store.model.serializer.DayOfEventSerializer;
 import org.ossg.store.model.serializer.TournamentSerializer;
 
 @ApplicationScoped
 public class DocumentTournamentSerializer implements TournamentSerializer<Document>{
+
+	@Inject
+    DayOfEventSerializer<Document> dayOfEventSerializer;
 
 	@Override
 	public Document serialize(Tournament tournament) {
@@ -22,14 +27,15 @@ public class DocumentTournamentSerializer implements TournamentSerializer<Docume
 
 	        return new Document("id", tournament.getId())
                     .append("title", tournament.getTitle())
-                    .append("dayOfEvent", tournament.getDayOfEvent());
+                    .append("dayOfEvent", dayOfEventSerializer.serialize(tournament.getDayOfEvent()));
 	}
 
 	@Override
 	public Tournament deserialize(Document document) {
         String id = document.getString("id");
         String title = document.getString("title");
-        DayOfEvent dayOfEvent = (DayOfEvent) document.get("dayOfEvent");
+		Document dayOfEventDocument = (Document) document.get("dayOfEvent");
+		DayOfEvent dayOfEvent = dayOfEventSerializer.deserialize(dayOfEventDocument);
 
         if (document == null
 				|| (id == null)

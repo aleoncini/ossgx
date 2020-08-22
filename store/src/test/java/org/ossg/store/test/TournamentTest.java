@@ -66,7 +66,8 @@ public class TournamentTest {
 	@Test
 	void testSerialization() {
 
-		Tournament first = new Tournament().setId("aaa").setTitle("First tournament").setDayOfEvent(new DayOfEvent());
+		DayOfEvent dayOfEvent = new DayOfEvent().setDay(4).setMonth(7).setYear(2020);
+		Tournament first = new Tournament().setId("aaa").setTitle("First tournament").setDayOfEvent(dayOfEvent);
 		Tournament second = new Tournament();
 		
         /** test different objects */

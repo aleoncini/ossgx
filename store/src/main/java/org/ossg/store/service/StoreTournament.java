@@ -10,7 +10,6 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.DeleteResult;
 
 import org.bson.Document;
-import org.ossg.store.model.DayOfEvent;
 import org.ossg.store.model.Tournament;
 import org.ossg.store.model.serializer.DayOfEventSerializer;
 import org.ossg.store.model.serializer.TournamentSerializer;

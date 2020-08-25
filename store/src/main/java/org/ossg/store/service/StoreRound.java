@@ -29,7 +29,6 @@ public class StoreRound {
     public Round get(String id){
         Document query = new Document("id", id);
         Document round = mongoClient.getDatabase("ossg").getCollection(COLLECTION).find(query).first();
-
         return (round != null) ? serializer.deserialize(round) : null;
     }
 

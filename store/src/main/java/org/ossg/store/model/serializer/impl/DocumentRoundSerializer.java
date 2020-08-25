@@ -47,9 +47,10 @@ public class DocumentRoundSerializer implements RoundSerializer<Document>{
         Document scores = new Document();
         for(int i = 1; i<= 18; i++){
             Score score = round.getScore(i);
-            if(score != null){
-                scores.append("" + i, scoreSerializer.serialize(score));
+            if(score == null){
+                throw new IllegalArgumentException("Round contains null score: " + i);
             }
+            scores.append("" + i, scoreSerializer.serialize(score));
         }
         document.append("scores", scores);
         return document;
@@ -86,15 +87,17 @@ public class DocumentRoundSerializer implements RoundSerializer<Document>{
         if(document.containsKey("tournamentId")){
             round.setTournamentId(document.getString("tournamentId")).setTournamentName(document.getString("tournamentName"));
         }
-        if(document.containsKey("scores")){
-            Document scores = (Document) document.get("scores");
-            for(int i = 1; i<= 18; i++){
-                Document scoreDocument = (Document) scores.get("" + i);
-                if(scoreDocument != null){
-                    round.setScore(i, scoreDocument.getInteger("hcp"), scoreDocument.getInteger("par"), scoreDocument.getInteger("strokes"));
-                }
-            }    
+        if(!document.containsKey("scores")){
+			throw new IllegalArgumentException("Unable to deserialize the Round object. Scores not available");
         }
+        Document scores = (Document) document.get("scores");
+        for(int i = 1; i<= 18; i++){
+            Document scoreDocument = (Document) scores.get("" + i);
+            if(scoreDocument == null){
+                throw new IllegalArgumentException("Unable to deserialize the Round object. Score not available: " + i);
+            }
+            round.setScore(i, scoreSerializer.deserialize(scoreDocument));
+        }    
 
         return round;
 	}

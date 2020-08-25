@@ -11,7 +11,7 @@ public class Scorecard {
 		return score;
     }
 
-    private int calculateAdditionalStrokes(int phcp, int hcp){
+    public int calculateAdditionalStrokes(int phcp, int hcp){
         if (phcp == 18){
             return 1;
         }
@@ -28,7 +28,7 @@ public class Scorecard {
         return 0;
     }
 
-    private int calculatePoints(int par, int additionalStrokes, int strokes){
+    public int calculatePoints(int par, int additionalStrokes, int strokes){
         int stb = ((par + additionalStrokes) - strokes) + 2;
         if (stb < 0){
             stb = 0;

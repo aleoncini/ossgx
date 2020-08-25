@@ -7,10 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.ossg.store.model.DayOfEvent;
 import org.ossg.store.model.Round;
-import org.ossg.store.model.Score;
 import org.ossg.store.model.serializer.RoundSerializer;
-import org.ossg.store.model.util.Scorecard;
-
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
@@ -117,7 +114,7 @@ public class RoundTest {
             .setDayOfEvent(dayOfEvent);
 
         for(int i = 1; i<= 18; i++){
-            first.setScore(i, i, 4, 5);
+            first.setScore(i, i, 4, 5, 2, 3);
         }    
 		
         /** test different objects */

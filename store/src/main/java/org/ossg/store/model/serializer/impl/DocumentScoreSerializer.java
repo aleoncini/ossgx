@@ -15,8 +15,10 @@ public class DocumentScoreSerializer implements ScoreSerializer<Document> {
             || (score.getStrokes() == 0) 
             || (score.getHcp() == 0) 
             || (score.getPar() == 0) 
+            || (score.getAdditionalStrokes() < 0) 
+            || (score.getPoints() < 0) 
         ) {
-	            throw new IllegalArgumentException("Object contains invalid data");
+	            throw new IllegalArgumentException("Score object contains invalid data");
 	        }
 
 	        return new Document("hcp", score.getHcp())

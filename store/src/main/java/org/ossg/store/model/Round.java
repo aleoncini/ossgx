@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.ossg.store.model.util.Scorecard;
-
 public class Round {
     private String id;
     private DayOfEvent dayOfEvent;
@@ -17,6 +15,7 @@ public class Round {
     private String courseName;
     private int phcp;
     private Map<String, Score> scores = new HashMap<String, Score>();
+
     
     public String getId() {
         return id;
@@ -99,13 +98,31 @@ public class Round {
         return this;
     }
 
-    public Score getScore(int holeNumber) {
-        return scores.get(Integer.toString(holeNumber));
+    public Map<String, Score> getScores() {
+        return this.scores;
     }
 
-    public Round setScore(int holeNumber, int hcp, int par, int strokes) {
-        Score score = new Scorecard().setScore(phcp, hcp, par, strokes);
-        scores.put(Integer.toString(holeNumber), score);
+    public Round setScores(Map<String, Score> scores) {
+        this.scores = scores;
+        return this;
+    }
+
+    public Score getScore(int holeNumber) {
+        return (scores == null) ? null : scores.get("" + holeNumber);
+    }
+
+    public Round setScore(int holeNumber, int hcp, int par, int strokes, int additionalStrokes, int points) {
+        return this.setScore(holeNumber, new Score()
+                        .setHcp(hcp)
+                        .setPar(par)
+                        .setStrokes(strokes)
+                        .setAdditionalStrokes(additionalStrokes)
+                        .setPoints(points)
+        );
+    }
+
+    public Round setScore(int holeNumber, Score score) {
+        scores.put("" + holeNumber, score);
         return this;
     }
 
@@ -129,6 +146,15 @@ public class Round {
         buffer.append("\"courseId\": \"").append(courseId).append("\"");
         buffer.append(", ");
         buffer.append("\"courseName\": \"").append(courseName).append("\"");
+        buffer.append(", ");
+        buffer.append("\"scores\": { ");
+
+        buffer.append("\"1\": ").append(getScore(1).toString());
+        for(int i = 2; i<= 18; i++){
+            buffer.append(", ");
+            buffer.append("\"").append(i).append("\": ").append(getScore(i).toString());
+        }    
+        buffer.append(" }");
         buffer.append(" }");
         return  buffer.toString();
     }

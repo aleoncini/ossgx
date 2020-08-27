@@ -85,10 +85,16 @@ public class CourseTest {
 		/** test equals objects */
 		Document document = serializer.serialize(first);
         second = serializer.deserialize(document);
-		
+
 		Assertions.assertTrue(first.equals(second));
 		Assertions.assertTrue(second.equals(first));
 		
+		/** test correct sequence of holes */
+		for (int i=1; i<=18; i++){
+			int hcp = second.getHole(i).getHcp();
+			Assertions.assertTrue(hcp == i);
+		}				
+
 	}
 
 }

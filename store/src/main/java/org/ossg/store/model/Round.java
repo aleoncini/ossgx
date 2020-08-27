@@ -14,8 +14,7 @@ public class Round {
     private String courseId;
     private String courseName;
     private int phcp;
-    private Map<String, Score> scores = new HashMap<String, Score>();
-
+    private Score[] scores = new Score[18]; 
     
     public String getId() {
         return id;
@@ -98,17 +97,17 @@ public class Round {
         return this;
     }
 
-    public Map<String, Score> getScores() {
+    public Score[] getScores() {
         return this.scores;
     }
 
-    public Round setScores(Map<String, Score> scores) {
+    public Round setScores(Score[] scores) {
         this.scores = scores;
         return this;
     }
 
     public Score getScore(int holeNumber) {
-        return (scores == null) ? null : scores.get("" + holeNumber);
+        return scores[holeNumber -1];
     }
 
     public Round setScore(int holeNumber, int hcp, int par, int strokes, int additionalStrokes, int points) {
@@ -122,7 +121,7 @@ public class Round {
     }
 
     public Round setScore(int holeNumber, Score score) {
-        scores.put("" + holeNumber, score);
+        scores[holeNumber -1] = score;
         return this;
     }
 
@@ -147,14 +146,14 @@ public class Round {
         buffer.append(", ");
         buffer.append("\"courseName\": \"").append(courseName).append("\"");
         buffer.append(", ");
-        buffer.append("\"scores\": { ");
+        buffer.append("\"scores\": [ ");
 
-        buffer.append("\"1\": ").append(getScore(1).toString());
-        for(int i = 2; i<= 18; i++){
+        buffer.append(scores[0]);
+        for(int i = 1; i< 18; i++){
             buffer.append(", ");
-            buffer.append("\"").append(i).append("\": ").append(getScore(i).toString());
+            buffer.append(scores[1]);
         }    
-        buffer.append(" }");
+        buffer.append(" ]");
         buffer.append(" }");
         return  buffer.toString();
     }

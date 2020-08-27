@@ -1,5 +1,8 @@
 package org.ossg.store.model.serializer.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -26,8 +29,6 @@ public class DocumentCourseSerializer implements CourseSerializer<Document>{
 	            || (course.getId().length() == 0) 
 	            || (course.getName() == null) 
 	            || (course.getName().length() == 0) 
-	            || (course.getHoles() == null) 
-	            || (course.getHoles().size() < 18) 
 	        ) {
 	            throw new IllegalArgumentException("Course object contains invalid data");
 	        }
@@ -57,13 +58,13 @@ public class DocumentCourseSerializer implements CourseSerializer<Document>{
             if (course.getPosition() != null){
                 document.append("position", positionSerializer.serialize(course.getPosition()));
             }
-    
-            Document holes = new Document();
-            for (int i=1; i<=18; i++){
-                String holeName = String.valueOf(i);
-                holes.append(holeName, holeSerializer.serialize(course.getHole(i)));
+
+            List<Document> holeDocuments = new ArrayList<Document>();
+            for (Hole hole : course.getHoles()) {
+                holeDocuments.add( holeSerializer.serialize(hole) );                
             }
-            document.append("holes",holes);
+    
+            document.append("holes",holeDocuments);
             return document;    
 	}
 
@@ -71,14 +72,12 @@ public class DocumentCourseSerializer implements CourseSerializer<Document>{
 	public Course deserialize(Document serialized) {
         String id = serialized.getString("id");
         String name = serialized.getString("name");
-        Document holesDocument = (Document) serialized.get("holes");
 
 		if (serialized == null
 				|| (id == null)
 				|| (id.length() == 0)
 				|| (name == null)
 				|| (name.length() == 0)
-				|| (holesDocument == null)
 			) {
 			throw new IllegalArgumentException("Unable to deserialize Course object. Document contains invalid data");
         }
@@ -106,12 +105,15 @@ public class DocumentCourseSerializer implements CourseSerializer<Document>{
             course.setPosition(position);
         }
 
-        for (int i=1; i<=18; i++){
-            String holeName = String.valueOf(i);
-            Document holeDocument = (Document) holesDocument.get(holeName);
+        List<Document> holeDocuments = (List<Document>) serialized.get("holes");
+
+        Hole[] holes = new Hole[18];
+        int index = 0;
+        for (Document holeDocument : holeDocuments){
             Hole hole = holeSerializer.deserialize(holeDocument);
-            course.setHole(i, hole);
+            holes[index++] = hole;
         }
+        course.setHoles(holes);
 
         return course;
 	}

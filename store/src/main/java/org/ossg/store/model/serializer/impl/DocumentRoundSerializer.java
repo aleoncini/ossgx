@@ -1,5 +1,8 @@
 package org.ossg.store.model.serializer.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -44,15 +47,12 @@ public class DocumentRoundSerializer implements RoundSerializer<Document>{
                     .append("tournamentName", round.getTournamentName());
         }
 
-        Document scores = new Document();
-        for(int i = 1; i<= 18; i++){
-            Score score = round.getScore(i);
-            if(score == null){
-                throw new IllegalArgumentException("Round contains null score: " + i);
-            }
-            scores.append("" + i, scoreSerializer.serialize(score));
+        List<Document> scoreDocuments = new ArrayList<Document>();
+        for (Score score : round.getScores()) {
+            scoreDocuments.add( scoreSerializer.serialize(score) );                
         }
-        document.append("scores", scores);
+        document.append("scores",scoreDocuments);
+
         return document;
 	}
 
@@ -90,14 +90,14 @@ public class DocumentRoundSerializer implements RoundSerializer<Document>{
         if(!document.containsKey("scores")){
 			throw new IllegalArgumentException("Unable to deserialize the Round object. Scores not available");
         }
-        Document scores = (Document) document.get("scores");
-        for(int i = 1; i<= 18; i++){
-            Document scoreDocument = (Document) scores.get("" + i);
-            if(scoreDocument == null){
-                throw new IllegalArgumentException("Unable to deserialize the Round object. Score not available: " + i);
-            }
-            round.setScore(i, scoreSerializer.deserialize(scoreDocument));
-        }    
+        List<Document> scoreDocuments = (List<Document>) document.get("scores");
+        Score[] scores = new Score[18];
+        int index = 0;
+        for (Document scoreDocument : scoreDocuments){
+            Score score = scoreSerializer.deserialize(scoreDocument);
+            scores[index++] = score;
+        }
+        round.setScores(scores);
 
         return round;
 	}

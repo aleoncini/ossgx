@@ -13,7 +13,8 @@ public class Course {
     private String cap;
     private String website;
     private Position position;
-    private Map<String, Hole> holes = new HashMap<String, Hole>();
+    //private Map<String, Hole> holes = new HashMap<String, Hole>();
+    private Hole[] holes = new Hole[18]; 
 
     public String getId() {
         return id;
@@ -87,26 +88,21 @@ public class Course {
         return this;
     }
 
-    public Map<String, Hole> getHoles() {
+    public Hole[] getHoles() {
         return holes;
     }
 
-    public Hole getHole(int holeNumber) {
-        String holeName = String.valueOf(holeNumber);
-        return holes.get(holeName);
-    }
-
     public Course setHoles(Hole[] holes) {
-        for (int i=1; i<=18; i++){
-            String holeName = String.valueOf(i);
-            this.holes.put(holeName, holes[i]);
-        }
+        this.holes = holes;
         return this;
     }
 
+    public Hole getHole(int holeNumber) {
+        return holes[holeNumber -1];
+    }
+
     public Course setHole(int holeNumber, Hole hole) {
-        String holeName = String.valueOf(holeNumber);
-        holes.put(holeName, hole);
+        this.holes[holeNumber -1] = hole;
         return this;
     }
 
@@ -184,15 +180,13 @@ public class Course {
 
         if (holes != null){
             if (notFirst) buffer.append(", ");
-            buffer.append("\"holes\": { ");
-            for (int i=1; i<=18; i++) {
-                String holeName = String.valueOf(i);
-                if (i>1){
-                    buffer.append(", ");
-                }
-                buffer.append("\"").append(holeName).append("\": ").append(holes.get(holeName).toString());
+            buffer.append("\"holes\": [ ");
+            buffer.append(holes[0]);
+            for (int i=1; i<18; i++) {
+                buffer.append(", ");
+                buffer.append(holes[i]);
             }
-            buffer.append(" }");
+            buffer.append(" ]");
         }
         buffer.append(" }");
         return  buffer.toString();

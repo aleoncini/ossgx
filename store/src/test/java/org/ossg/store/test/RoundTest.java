@@ -127,7 +127,13 @@ public class RoundTest {
 		
 		Assertions.assertTrue(first.equals(second));
 		Assertions.assertTrue(second.equals(first));
-		
+        
+        /** test correct sequence of holes */
+		for (int i=1; i<=18; i++){
+			int hcp = second.getScore(i).getHcp();
+			Assertions.assertTrue(hcp == i);
+		}				
+
 	}
     
 }

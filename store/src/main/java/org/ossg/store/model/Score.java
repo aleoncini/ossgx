@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Score {
     private int par = 0;
     private int hcp = 0;
-    private int strokes = 0;
+    private int strokes = -1;
     private int additionalStrokes = -1;
     private int points = -1;
 

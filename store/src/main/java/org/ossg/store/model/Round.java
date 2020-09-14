@@ -1,7 +1,5 @@
 package org.ossg.store.model;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class Round {
@@ -145,6 +143,8 @@ public class Round {
         buffer.append("\"courseId\": \"").append(courseId).append("\"");
         buffer.append(", ");
         buffer.append("\"courseName\": \"").append(courseName).append("\"");
+        buffer.append(", ");
+        buffer.append("\"phcp\": ").append(phcp);
         buffer.append(", ");
         buffer.append("\"scores\": [ ");
 

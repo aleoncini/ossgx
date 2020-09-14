@@ -12,7 +12,7 @@ public class DocumentScoreSerializer implements ScoreSerializer<Document> {
 	@Override
 	public Document serialize(Score score) {
 		if (score == null
-            || (score.getStrokes() == 0) 
+            || (score.getStrokes() < 0) 
             || (score.getHcp() == 0) 
             || (score.getPar() == 0) 
             || (score.getAdditionalStrokes() < 0) 
@@ -39,7 +39,7 @@ public class DocumentScoreSerializer implements ScoreSerializer<Document> {
         if (document == null
 				|| (hcp == 0)
 				|| (par == 0)
-				|| (strokes == 0)
+				|| (strokes < 0)
 				|| (additionalStrokes < 0)
 				|| (points < 0)
 			) {

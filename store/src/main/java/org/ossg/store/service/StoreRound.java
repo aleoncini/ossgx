@@ -33,7 +33,12 @@ public class StoreRound {
     }
 
     public void add(Round round){
-        Document document = serializer.serialize(round);
+        Document document = null;
+        try {
+            document = serializer.serialize(round);
+        } catch (Exception e) {
+            //do nothing
+        }
         if(document != null){
             mongoClient.getDatabase("ossg").getCollection(COLLECTION).insertOne(document);
         }

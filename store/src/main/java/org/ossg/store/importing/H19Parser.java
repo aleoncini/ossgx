@@ -27,6 +27,9 @@ public class H19Parser {
         Document doc;
 		try {
             doc = Jsoup.connect(url).get();
+            if(! exists(doc)){
+                return null;
+            }
             Element playerElement = doc.getElementById("player-name");
             String playerName = playerElement.text().trim();
             String playerId = getPlayerId(playerName);
@@ -102,11 +105,48 @@ public class H19Parser {
     }
 
     private String getPlayerId(String name){
-        return "666";
+        String id = "666";
+        switch(name) {
+            case "Francesco Sanetti":
+              id = "7bb48a57b4d04d5c90e0a66cf167f4b4";
+              break;
+            case "Stefano Mauti":
+              id = "976a3e3c049940ceb0c230a9e0016779";
+              break;
+            case "fabio armellini":
+              id = "fcd40a9ef30a429896329a2ea0dee88f";
+              break;
+            case "Andrea Leoncini":
+              id = "31488c1cd84b482ab6115ebb7ab9fe32";
+              break;
+            case "Lorenzo Scomparin":
+              id = "2ddeda86cdfd46b9a94c794db97ae8b6";
+              break;
+            case "Andy Richardson":
+              id = "d34a45a7b27e4d449ecadf691a02935c";
+              break;
+            case "Andrea Brancaccio":
+              id = "brankac";
+              break;
+            case "Primo Marchini":
+              id = "bca8614c90a641199c57510c63eee799";
+              break;
+            case "Federico Morena":
+              id = "4a320dd3b5fc4699adba10085f6f6af8";
+              break;
+            case "Valerio Garofoli":
+              id = "8637567bf51044729308abf4fdfaafb2";
+              break;
+        }
+        return id;
     }
     
     private String getCourseId(String name){
         return "999";
     }
 
+    private boolean exists(Document doc){
+        Elements divNoRounds = doc.getElementsByClass("no-rounds");
+        return (divNoRounds.size() > 0) ? false : true;
+    }
 }

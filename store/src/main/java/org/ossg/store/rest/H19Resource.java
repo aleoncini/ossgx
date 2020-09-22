@@ -35,7 +35,8 @@ public class H19Resource {
             if (! overwrite.equalsIgnoreCase("yes")){
                 // overwrite specified but value is not yes, nothing to do here
                 return null;
-            } 
+            }
+            service.remove(id);
         }
         Round round = parser.parse(id);
         service.add(round);

@@ -77,6 +77,9 @@ public class StoreTournament {
         if(month > 0){
             filter.append("dayOfEvent.month", month);
         }
+        if(month > 0){
+            filter.append("dayOfEvent.month", month);
+        }
         if(day > 0){
             filter.append("dayOfEvent.day", day);
         }

@@ -73,9 +73,9 @@ public class StoreTournament {
     public List<Tournament> searchByDate(int day, int month, int year){
         List<Tournament> list = new ArrayList<>();
 
-        Document filter = new Document("dayOfEvent.year", year);
-        if(month > 0){
-            filter.append("dayOfEvent.month", month);
+        Document filter = new Document();
+        if(year > 0){
+            filter.append("dayOfEvent.year", year);
         }
         if(month > 0){
             filter.append("dayOfEvent.month", month);
